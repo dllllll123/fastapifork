@@ -12,12 +12,23 @@ class Foo(FooBaseModel):
     pass
 
 
+class PartialFoo(FooBaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
 app = FastAPI()
 
 
 @app.post("/")
 async def post(
     foo: Foo | None = None,
+):
+    return foo
+
+
+@app.post("/partial")
+async def post_partial(
+    foo: PartialFoo,
 ):
     return foo
 
@@ -123,3 +134,9 @@ def test_openapi_schema():
             },
         }
     )
+
+
+def test_partial_update():
+    response = client.post("/partial", json={"extra_field": "value"})
+    assert response.status_code == 200, response.text
+    assert response.json() == {"extra_field": "value"}

@@ -1,0 +1,39 @@
+diff --git a/tests/test_additional_properties_bool.py b/tests/test_additional_properties_bool.py
+index 9a1e139ea..7e83b9366 100644
+--- a/tests/test_additional_properties_bool.py
++++ b/tests/test_additional_properties_bool.py
+@@ -12,6 +12,10 @@ class Foo(FooBaseModel):
+     pass
+ 
+ 
++class PartialFoo(FooBaseModel):
++    model_config = ConfigDict(extra="allow")
++
++
+ app = FastAPI()
+ 
+ 
+@@ -22,6 +26,13 @@ async def post(
+     return foo
+ 
+ 
++@app.post("/partial")
++async def post_partial(
++    foo: PartialFoo,
++):
++    return foo
++
++
+ client = TestClient(app)
+ 
+ 
+@@ -123,3 +134,9 @@ def test_openapi_schema():
+             },
+         }
+     )
++
++
++def test_partial_update():
++    response = client.post("/partial", json={"extra_field": "value"})
++    assert response.status_code == 200, response.text
++    assert response.json() == {"extra_field": "value"}
