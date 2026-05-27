@@ -36,6 +36,23 @@ def test_call_valid():
     assert response.json() == {}
 
 
+def test_partial_update():
+    class PartialFoo(FooBaseModel):
+        model_config = ConfigDict(extra="allow")
+
+    partial_app = FastAPI()
+
+    @partial_app.post("/partial")
+    async def partial(foo: PartialFoo):
+        return foo
+
+    partial_client = TestClient(partial_app)
+
+    response = partial_client.post("/partial", json={"bar": "baz"})
+    assert response.status_code == 200, response.text
+    assert response.json() == {"bar": "baz"}
+
+
 def test_openapi_schema():
     response = client.get("/openapi.json")
     assert response.status_code == 200, response.text
