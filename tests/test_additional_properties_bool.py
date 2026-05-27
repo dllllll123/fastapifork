@@ -22,6 +22,17 @@ async def post(
     return foo
 
 
+class PartialFoo(FooBaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+@app.post("/partial")
+async def post_partial(
+    foo: PartialFoo | None = None,
+):
+    return foo
+
+
 client = TestClient(app)
 
 
@@ -34,6 +45,12 @@ def test_call_valid():
     response = client.post("/", json={})
     assert response.status_code == 200
     assert response.json() == {}
+
+
+def test_partial_update():
+    response = client.post("/partial", json={"foo": {"bar": "baz"}})
+    assert response.status_code == 200
+    assert response.json() == {"foo": {"bar": "baz"}}
 
 
 def test_openapi_schema():
@@ -78,6 +95,41 @@ def test_openapi_schema():
                             },
                         },
                     }
+                },
+                "/partial": {
+                    "post": {
+                        "summary": "Post Partial",
+                        "operationId": "post_partial_partial_post",
+                        "requestBody": {
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "anyOf": [
+                                            {"$ref": "#/components/schemas/PartialFoo"},
+                                            {"type": "null"},
+                                        ],
+                                        "title": "Foo",
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "200": {
+                                "description": "Successful Response",
+                                "content": {"application/json": {"schema": {}}},
+                            },
+                            "422": {
+                                "description": "Validation Error",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/HTTPValidationError"
+                                        }
+                                    }
+                                },
+                            },
+                        },
+                    }
                 }
             },
             "components": {
@@ -87,6 +139,12 @@ def test_openapi_schema():
                         "additionalProperties": False,
                         "type": "object",
                         "title": "Foo",
+                    },
+                    "PartialFoo": {
+                        "properties": {},
+                        "additionalProperties": True,
+                        "type": "object",
+                        "title": "PartialFoo",
                     },
                     "HTTPValidationError": {
                         "properties": {
