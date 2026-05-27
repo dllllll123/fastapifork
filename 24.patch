@@ -1,0 +1,97 @@
+diff --git a/tests/test_additional_properties_bool.py b/tests/test_additional_properties_bool.py
+index 9a1e139ea..4c962622a 100644
+--- a/tests/test_additional_properties_bool.py
++++ b/tests/test_additional_properties_bool.py
+@@ -12,6 +12,10 @@ class Foo(FooBaseModel):
+     pass
+ 
+ 
++class PartialFoo(FooBaseModel):
++    model_config = ConfigDict(extra="allow")
++
++
+ app = FastAPI()
+ 
+ 
+@@ -22,6 +26,13 @@ async def post(
+     return foo
+ 
+ 
++@app.post("/partial")
++async def partial(
++    foo: PartialFoo | None = None,
++):
++    return foo
++
++
+ client = TestClient(app)
+ 
+ 
+@@ -36,6 +47,12 @@ def test_call_valid():
+     assert response.json() == {}
+ 
+ 
++def test_partial_update():
++    response = client.post("/partial", json={"foo": {"bar": "baz"}})
++    assert response.status_code == 200
++    assert response.json() == {"bar": "baz"}
++
++
+ def test_openapi_schema():
+     response = client.get("/openapi.json")
+     assert response.status_code == 200, response.text
+@@ -78,6 +95,41 @@ def test_openapi_schema():
+                             },
+                         },
+                     }
++                },
++                "/partial": {
++                    "post": {
++                        "summary": "Partial",
++                        "operationId": "partial_partial_post",
++                        "requestBody": {
++                            "content": {
++                                "application/json": {
++                                    "schema": {
++                                        "anyOf": [
++                                            {"$ref": "#/components/schemas/PartialFoo"},
++                                            {"type": "null"},
++                                        ],
++                                        "title": "PartialFoo",
++                                    }
++                                }
++                            }
++                        },
++                        "responses": {
++                            "200": {
++                                "description": "Successful Response",
++                                "content": {"application/json": {"schema": {}}},
++                            },
++                            "422": {
++                                "description": "Validation Error",
++                                "content": {
++                                    "application/json": {
++                                        "schema": {
++                                            "$ref": "#/components/schemas/HTTPValidationError"
++                                        }
++                                    }
++                                },
++                            },
++                        },
++                    }
+                 }
+             },
+             "components": {
+@@ -88,6 +140,12 @@ def test_openapi_schema():
+                         "type": "object",
+                         "title": "Foo",
+                     },
++                    "PartialFoo": {
++                        "properties": {},
++                        "additionalProperties": True,
++                        "type": "object",
++                        "title": "PartialFoo",
++                    },
+                     "HTTPValidationError": {
+                         "properties": {
+                             "detail": {
