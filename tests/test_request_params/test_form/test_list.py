@@ -6,7 +6,14 @@ from fastapi import FastAPI, Form
 from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field
 
-from .utils import get_body_model_name
+from functools import partial
+
+from tests.utils import get_body_model_name as get_body_model_name_impl
+
+get_body_model_name = partial(
+    get_body_model_name_impl,
+    content_type="application/x-www-form-urlencoded",
+)
 
 app = FastAPI()
 

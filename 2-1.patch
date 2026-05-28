@@ -1,0 +1,303 @@
+diff --git a/tests/test_request_params/test_body/test_list.py b/tests/test_request_params/test_body/test_list.py
+index aa9745f84..1bb7642c5 100644
+--- a/tests/test_request_params/test_body/test_list.py
++++ b/tests/test_request_params/test_body/test_list.py
+@@ -6,7 +6,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_body_model_name
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_body/test_optional_list.py b/tests/test_request_params/test_body/test_optional_list.py
+index 2c5c5d61b..bbf95c4ce 100644
+--- a/tests/test_request_params/test_body/test_optional_list.py
++++ b/tests/test_request_params/test_body/test_optional_list.py
+@@ -5,7 +5,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_body_model_name
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_body/test_optional_str.py b/tests/test_request_params/test_body/test_optional_str.py
+index 184fc94cb..714ffff02 100644
+--- a/tests/test_request_params/test_body/test_optional_str.py
++++ b/tests/test_request_params/test_body/test_optional_str.py
+@@ -5,7 +5,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_body_model_name
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_body/test_required_str.py b/tests/test_request_params/test_body/test_required_str.py
+index 2e02f8d20..10ed10d19 100644
+--- a/tests/test_request_params/test_body/test_required_str.py
++++ b/tests/test_request_params/test_body/test_required_str.py
+@@ -6,7 +6,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_body_model_name
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_body/utils.py b/tests/test_request_params/test_body/utils.py
+deleted file mode 100644
+index bf07394f9..000000000
+--- a/tests/test_request_params/test_body/utils.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-from typing import Any
+-
+-
+-def get_body_model_name(openapi: dict[str, Any], path: str) -> str:
+-    body = openapi["paths"][path]["post"]["requestBody"]
+-    body_schema = body["content"]["application/json"]["schema"]
+-    return body_schema.get("$ref", "").split("/")[-1]
+diff --git a/tests/test_request_params/test_file/test_list.py b/tests/test_request_params/test_file/test_list.py
+index 5332795f4..f338190e1 100644
+--- a/tests/test_request_params/test_file/test_list.py
++++ b/tests/test_request_params/test_file/test_list.py
+@@ -4,7 +4,14 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="multipart/form-data",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_file/test_optional.py b/tests/test_request_params/test_file/test_optional.py
+index 3d1aac25e..64bbc40b4 100644
+--- a/tests/test_request_params/test_file/test_optional.py
++++ b/tests/test_request_params/test_file/test_optional.py
+@@ -4,7 +4,14 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="multipart/form-data",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_file/test_optional_list.py b/tests/test_request_params/test_file/test_optional_list.py
+index 3c211b1e8..b57d47022 100644
+--- a/tests/test_request_params/test_file/test_optional_list.py
++++ b/tests/test_request_params/test_file/test_optional_list.py
+@@ -4,7 +4,14 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="multipart/form-data",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_file/test_required.py b/tests/test_request_params/test_file/test_required.py
+index 22d6c0fff..7c6c1ddb4 100644
+--- a/tests/test_request_params/test_file/test_required.py
++++ b/tests/test_request_params/test_file/test_required.py
+@@ -4,7 +4,14 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="multipart/form-data",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_file/utils.py b/tests/test_request_params/test_file/utils.py
+deleted file mode 100644
+index e2a97ccd9..000000000
+--- a/tests/test_request_params/test_file/utils.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-from typing import Any
+-
+-
+-def get_body_model_name(openapi: dict[str, Any], path: str) -> str:
+-    body = openapi["paths"][path]["post"]["requestBody"]
+-    body_schema = body["content"]["multipart/form-data"]["schema"]
+-    return body_schema.get("$ref", "").split("/")[-1]
+diff --git a/tests/test_request_params/test_form/test_list.py b/tests/test_request_params/test_form/test_list.py
+index abe781c94..7091f6fad 100644
+--- a/tests/test_request_params/test_form/test_list.py
++++ b/tests/test_request_params/test_form/test_list.py
+@@ -6,7 +6,14 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="application/x-www-form-urlencoded",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_form/test_optional_list.py b/tests/test_request_params/test_form/test_optional_list.py
+index 7ecf9c9bf..3502ae1e0 100644
+--- a/tests/test_request_params/test_form/test_optional_list.py
++++ b/tests/test_request_params/test_form/test_optional_list.py
+@@ -5,7 +5,14 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="application/x-www-form-urlencoded",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_form/test_optional_str.py b/tests/test_request_params/test_form/test_optional_str.py
+index 4ef16756e..9883ddbc9 100644
+--- a/tests/test_request_params/test_form/test_optional_str.py
++++ b/tests/test_request_params/test_form/test_optional_str.py
+@@ -5,7 +5,14 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="application/x-www-form-urlencoded",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_form/test_required_str.py b/tests/test_request_params/test_form/test_required_str.py
+index 7c9523b30..62dabe623 100644
+--- a/tests/test_request_params/test_form/test_required_str.py
++++ b/tests/test_request_params/test_form/test_required_str.py
+@@ -6,7 +6,14 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from functools import partial
++
++from tests.utils import get_body_model_name as get_body_model_name_impl
++
++get_body_model_name = partial(
++    get_body_model_name_impl,
++    content_type="application/x-www-form-urlencoded",
++)
+ 
+ app = FastAPI()
+ 
+diff --git a/tests/test_request_params/test_form/utils.py b/tests/test_request_params/test_form/utils.py
+deleted file mode 100644
+index 913217311..000000000
+--- a/tests/test_request_params/test_form/utils.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-from typing import Any
+-
+-
+-def get_body_model_name(openapi: dict[str, Any], path: str) -> str:
+-    body = openapi["paths"][path]["post"]["requestBody"]
+-    body_schema = body["content"]["application/x-www-form-urlencoded"]["schema"]
+-    return body_schema.get("$ref", "").split("/")[-1]
+diff --git a/tests/utils.py b/tests/utils.py
+index 934d3b0fa..3e26b1c29 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -1,8 +1,15 @@
+ import importlib
+ import sys
++from typing import Any, Literal
+ 
+ import pytest
+ 
++RequestBodyContentType = Literal[
++    "application/json",
++    "application/x-www-form-urlencoded",
++    "multipart/form-data",
++]
++
+ needs_py310 = pytest.mark.skipif(
+     sys.version_info < (3, 10), reason="requires python3.10+"
+ )
+@@ -27,3 +34,31 @@ def skip_module_if_py_gte_314():
+     """Skip entire module on Python 3.14+ at import time."""
+     if sys.version_info >= (3, 14):
+         pytest.skip("requires python3.13-", allow_module_level=True)
++
++
++def get_request_body_schema(
++    openapi: dict[str, Any],
++    path: str,
++    *,
++    method: str = "post",
++    content_type: RequestBodyContentType = "application/json",
++) -> dict[str, Any]:
++    operation = openapi["paths"][path][method.lower()]
++    request_body = operation["requestBody"]
++    return request_body["content"][content_type]["schema"]
++
++
++def get_body_model_name(
++    openapi: dict[str, Any],
++    path: str,
++    *,
++    method: str = "post",
++    content_type: RequestBodyContentType = "application/json",
++) -> str:
++    body_schema = get_request_body_schema(
++        openapi,
++        path,
++        method=method,
++        content_type=content_type,
++    )
++    return body_schema.get("$ref", "").split("/")[-1]
