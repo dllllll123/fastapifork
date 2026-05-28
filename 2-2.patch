@@ -1,0 +1,648 @@
+diff --git a/tests/test_request_params/test_body/test_list.py b/tests/test_request_params/test_body/test_list.py
+index aa9745f84..ba3823988 100644
+--- a/tests/test_request_params/test_body/test_list.py
++++ b/tests/test_request_params/test_body/test_list.py
+@@ -6,7 +6,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -34,7 +34,7 @@ def read_model_required_list_str(p: BodyModelRequiredListStr):
+ )
+ def test_required_list_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -111,7 +111,7 @@ async def read_model_required_list_alias(p: BodyModelRequiredListAlias):
+ )
+ def test_required_list_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -212,7 +212,7 @@ async def read_model_required_list_validation_alias(
+ )
+ def test_required_list_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -329,7 +329,7 @@ def read_model_required_list_alias_and_validation_alias(
+ )
+ def test_required_list_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_body/test_optional_list.py b/tests/test_request_params/test_body/test_optional_list.py
+index 2c5c5d61b..397c476b9 100644
+--- a/tests/test_request_params/test_body/test_optional_list.py
++++ b/tests/test_request_params/test_body/test_optional_list.py
+@@ -5,7 +5,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -35,7 +35,7 @@ async def read_model_optional_list_str(p: BodyModelOptionalListStr):
+ )
+ def test_optional_list_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -126,7 +126,7 @@ async def read_model_optional_list_alias(p: BodyModelOptionalListAlias):
+ )
+ def test_optional_list_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -234,7 +234,7 @@ def read_model_optional_list_validation_alias(
+ )
+ def test_optional_list_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -353,7 +353,7 @@ def read_model_optional_list_alias_and_validation_alias(
+ )
+ def test_optional_list_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_body/test_optional_str.py b/tests/test_request_params/test_body/test_optional_str.py
+index 184fc94cb..b6e95203e 100644
+--- a/tests/test_request_params/test_body/test_optional_str.py
++++ b/tests/test_request_params/test_body/test_optional_str.py
+@@ -5,7 +5,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -33,7 +33,7 @@ async def read_model_optional_str(p: BodyModelOptionalStr):
+ )
+ def test_optional_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -121,7 +121,7 @@ async def read_model_optional_alias(p: BodyModelOptionalAlias):
+ )
+ def test_optional_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -221,7 +221,7 @@ def read_model_optional_validation_alias(
+ )
+ def test_optional_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -336,7 +336,7 @@ def read_model_optional_alias_and_validation_alias(
+ )
+ def test_optional_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_body/test_required_str.py b/tests/test_request_params/test_body/test_required_str.py
+index 2e02f8d20..c34bb9ce8 100644
+--- a/tests/test_request_params/test_body/test_required_str.py
++++ b/tests/test_request_params/test_body/test_required_str.py
+@@ -6,7 +6,7 @@ from fastapi import Body, FastAPI
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -34,7 +34,7 @@ async def read_model_required_str(p: BodyModelRequiredStr):
+ )
+ def test_required_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -107,7 +107,7 @@ async def read_model_required_alias(p: BodyModelRequiredAlias):
+ )
+ def test_required_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -201,7 +201,7 @@ def read_model_required_validation_alias(
+ )
+ def test_required_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -315,7 +315,7 @@ def read_model_required_alias_and_validation_alias(
+ )
+ def test_required_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/json")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_body/utils.py b/tests/test_request_params/test_body/utils.py
+deleted file mode 100644
+index bf07394f9..000000000
+--- a/tests/test_request_params/test_body/utils.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-from typing import Any
+-
+-
+-def get_body_model_name(openapi: dict[str, Any], path: str) -> str:
+-    body = openapi["paths"][path]["post"]["requestBody"]
+-    body_schema = body["content"]["application/json"]["schema"]
+-    return body_schema.get("$ref", "").split("/")[-1]
+diff --git a/tests/test_request_params/test_file/test_list.py b/tests/test_request_params/test_file/test_list.py
+index 5332795f4..fbe8ee6fc 100644
+--- a/tests/test_request_params/test_file/test_list.py
++++ b/tests/test_request_params/test_file/test_list.py
+@@ -4,7 +4,7 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -31,7 +31,7 @@ async def read_list_uploadfile(p: Annotated[list[UploadFile], File()]):
+ )
+ def test_list_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -112,7 +112,7 @@ async def read_list_uploadfile_alias(
+ )
+ def test_list_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -221,7 +221,7 @@ def read_list_uploadfile_validation_alias(
+ )
+ def test_list_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -341,7 +341,7 @@ def read_list_uploadfile_alias_and_validation_alias(
+ )
+ def test_list_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_file/test_optional.py b/tests/test_request_params/test_file/test_optional.py
+index 3d1aac25e..136639508 100644
+--- a/tests/test_request_params/test_file/test_optional.py
++++ b/tests/test_request_params/test_file/test_optional.py
+@@ -4,7 +4,7 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -31,7 +31,7 @@ async def read_optional_uploadfile(p: Annotated[UploadFile | None, File()] = Non
+ )
+ def test_optional_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -103,7 +103,7 @@ async def read_optional_uploadfile_alias(
+ )
+ def test_optional_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -194,7 +194,7 @@ def read_optional_uploadfile_validation_alias(
+ )
+ def test_optional_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -290,7 +290,7 @@ def read_optional_uploadfile_alias_and_validation_alias(
+ )
+ def test_optional_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_file/test_optional_list.py b/tests/test_request_params/test_file/test_optional_list.py
+index 3c211b1e8..d50d6fb89 100644
+--- a/tests/test_request_params/test_file/test_optional_list.py
++++ b/tests/test_request_params/test_file/test_optional_list.py
+@@ -4,7 +4,7 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -33,7 +33,7 @@ async def read_optional_list_uploadfile(
+ )
+ def test_optional_list_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -111,7 +111,7 @@ async def read_optional_list_uploadfile_alias(
+ )
+ def test_optional_list_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -203,7 +203,7 @@ def read_optional_list_uploadfile_validation_alias(
+ )
+ def test_optional_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -302,7 +302,7 @@ def read_optional_list_uploadfile_alias_and_validation_alias(
+ )
+ def test_optional_list_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_file/test_required.py b/tests/test_request_params/test_file/test_required.py
+index 22d6c0fff..564195ea3 100644
+--- a/tests/test_request_params/test_file/test_required.py
++++ b/tests/test_request_params/test_file/test_required.py
+@@ -4,7 +4,7 @@ import pytest
+ from fastapi import FastAPI, File, UploadFile
+ from fastapi.testclient import TestClient
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -31,7 +31,7 @@ async def read_required_uploadfile(p: Annotated[UploadFile, File()]):
+ )
+ def test_required_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -109,7 +109,7 @@ async def read_required_uploadfile_alias(
+ )
+ def test_required_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -217,7 +217,7 @@ def read_required_uploadfile_validation_alias(
+ )
+ def test_required_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -330,7 +330,7 @@ def read_required_uploadfile_alias_and_validation_alias(
+ )
+ def test_required_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "multipart/form-data")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_file/utils.py b/tests/test_request_params/test_file/utils.py
+deleted file mode 100644
+index e2a97ccd9..000000000
+--- a/tests/test_request_params/test_file/utils.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-from typing import Any
+-
+-
+-def get_body_model_name(openapi: dict[str, Any], path: str) -> str:
+-    body = openapi["paths"][path]["post"]["requestBody"]
+-    body_schema = body["content"]["multipart/form-data"]["schema"]
+-    return body_schema.get("$ref", "").split("/")[-1]
+diff --git a/tests/test_request_params/test_form/test_list.py b/tests/test_request_params/test_form/test_list.py
+index abe781c94..fe209de56 100644
+--- a/tests/test_request_params/test_form/test_list.py
++++ b/tests/test_request_params/test_form/test_list.py
+@@ -6,7 +6,7 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -34,7 +34,7 @@ def read_model_required_list_str(p: Annotated[FormModelRequiredListStr, Form()])
+ )
+ def test_required_list_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -110,7 +110,7 @@ async def read_model_required_list_alias(
+ )
+ def test_required_list_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -213,7 +213,7 @@ async def read_model_required_list_validation_alias(
+ )
+ def test_required_list_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -328,7 +328,7 @@ def read_model_required_list_alias_and_validation_alias(
+ )
+ def test_required_list_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_form/test_optional_list.py b/tests/test_request_params/test_form/test_optional_list.py
+index 7ecf9c9bf..891ffc49e 100644
+--- a/tests/test_request_params/test_form/test_optional_list.py
++++ b/tests/test_request_params/test_form/test_optional_list.py
+@@ -5,7 +5,7 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -35,7 +35,7 @@ async def read_model_optional_list_str(p: Annotated[FormModelOptionalListStr, Fo
+ )
+ def test_optional_list_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -105,7 +105,7 @@ async def read_model_optional_list_alias(
+ )
+ def test_optional_list_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -188,7 +188,7 @@ def read_model_optional_list_validation_alias(
+ )
+ def test_optional_list_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -280,7 +280,7 @@ def read_model_optional_list_alias_and_validation_alias(
+ )
+ def test_optional_list_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_form/test_optional_str.py b/tests/test_request_params/test_form/test_optional_str.py
+index 4ef16756e..5cb322bf3 100644
+--- a/tests/test_request_params/test_form/test_optional_str.py
++++ b/tests/test_request_params/test_form/test_optional_str.py
+@@ -5,7 +5,7 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -33,7 +33,7 @@ async def read_model_optional_str(p: Annotated[FormModelOptionalStr, Form()]):
+ )
+ def test_optional_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -98,7 +98,7 @@ async def read_model_optional_alias(p: Annotated[FormModelOptionalAlias, Form()]
+ )
+ def test_optional_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -175,7 +175,7 @@ def read_model_optional_validation_alias(
+ )
+ def test_optional_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -267,7 +267,7 @@ def read_model_optional_alias_and_validation_alias(
+ )
+ def test_optional_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_form/test_required_str.py b/tests/test_request_params/test_form/test_required_str.py
+index 7c9523b30..ae2dc5d55 100644
+--- a/tests/test_request_params/test_form/test_required_str.py
++++ b/tests/test_request_params/test_form/test_required_str.py
+@@ -6,7 +6,7 @@ from fastapi import FastAPI, Form
+ from fastapi.testclient import TestClient
+ from pydantic import BaseModel, Field
+ 
+-from .utils import get_body_model_name
++from tests.utils import get_request_body_schema
+ 
+ app = FastAPI()
+ 
+@@ -34,7 +34,7 @@ async def read_model_required_str(p: Annotated[FormModelRequiredStr, Form()]):
+ )
+ def test_required_str_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -104,7 +104,7 @@ async def read_model_required_alias(p: Annotated[FormModelRequiredAlias, Form()]
+ )
+ def test_required_str_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -197,7 +197,7 @@ def read_model_required_validation_alias(
+ )
+ def test_required_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+@@ -311,7 +311,7 @@ def read_model_required_alias_and_validation_alias(
+ )
+ def test_required_alias_and_validation_alias_schema(path: str):
+     openapi = app.openapi()
+-    body_model_name = get_body_model_name(openapi, path)
++    body_model_name = get_request_body_schema(openapi, path, "application/x-www-form-urlencoded")
+ 
+     assert app.openapi()["components"]["schemas"][body_model_name] == {
+         "properties": {
+diff --git a/tests/test_request_params/test_form/utils.py b/tests/test_request_params/test_form/utils.py
+deleted file mode 100644
+index 913217311..000000000
+--- a/tests/test_request_params/test_form/utils.py
++++ /dev/null
+@@ -1,7 +0,0 @@
+-from typing import Any
+-
+-
+-def get_body_model_name(openapi: dict[str, Any], path: str) -> str:
+-    body = openapi["paths"][path]["post"]["requestBody"]
+-    body_schema = body["content"]["application/x-www-form-urlencoded"]["schema"]
+-    return body_schema.get("$ref", "").split("/")[-1]
+diff --git a/tests/utils.py b/tests/utils.py
+index 934d3b0fa..19f4509d2 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -1,5 +1,6 @@
+ import importlib
+ import sys
++from typing import Any
+ 
+ import pytest
+ 
+@@ -27,3 +28,9 @@ def skip_module_if_py_gte_314():
+     """Skip entire module on Python 3.14+ at import time."""
+     if sys.version_info >= (3, 14):
+         pytest.skip("requires python3.13-", allow_module_level=True)
++
++
++def get_request_body_schema(openapi: dict[str, Any], path: str, content_type: str) -> str:
++    body = openapi["paths"][path]["post"]["requestBody"]
++    body_schema = body["content"][content_type]["schema"]
++    return body_schema.get("$ref", "").split("/")[-1]

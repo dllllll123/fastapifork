@@ -5,7 +5,7 @@ from fastapi import Body, FastAPI
 from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field
 
-from .utils import get_body_model_name
+from tests.utils import get_request_body_schema
 
 app = FastAPI()
 
@@ -33,7 +33,7 @@ async def read_model_optional_str(p: BodyModelOptionalStr):
 )
 def test_optional_str_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path, "application/json")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -121,7 +121,7 @@ async def read_model_optional_alias(p: BodyModelOptionalAlias):
 )
 def test_optional_str_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path, "application/json")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -221,7 +221,7 @@ def read_model_optional_validation_alias(
 )
 def test_optional_validation_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path, "application/json")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -336,7 +336,7 @@ def read_model_optional_alias_and_validation_alias(
 )
 def test_optional_alias_and_validation_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path, "application/json")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
