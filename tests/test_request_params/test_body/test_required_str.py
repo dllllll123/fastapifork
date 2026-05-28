@@ -6,7 +6,7 @@ from fastapi import Body, FastAPI
 from fastapi.testclient import TestClient
 from pydantic import BaseModel, Field
 
-from .utils import get_body_model_name
+from tests.utils import get_request_body_schema
 
 app = FastAPI()
 
@@ -34,7 +34,7 @@ async def read_model_required_str(p: BodyModelRequiredStr):
 )
 def test_required_str_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path)
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -107,7 +107,7 @@ async def read_model_required_alias(p: BodyModelRequiredAlias):
 )
 def test_required_str_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path)
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -201,7 +201,7 @@ def read_model_required_validation_alias(
 )
 def test_required_validation_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path)
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -315,7 +315,7 @@ def read_model_required_alias_and_validation_alias(
 )
 def test_required_alias_and_validation_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_request_body_schema(openapi, path)
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
