@@ -4,7 +4,7 @@ import pytest
 from fastapi import FastAPI, File, UploadFile
 from fastapi.testclient import TestClient
 
-from .utils import get_body_model_name
+from tests.utils import get_body_model_name
 
 app = FastAPI()
 
@@ -31,7 +31,7 @@ async def read_list_uploadfile(p: Annotated[list[UploadFile], File()]):
 )
 def test_list_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_body_model_name(openapi, path, content_type="multipart/form-data")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -112,7 +112,7 @@ async def read_list_uploadfile_alias(
 )
 def test_list_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_body_model_name(openapi, path, content_type="multipart/form-data")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -221,7 +221,7 @@ def read_list_uploadfile_validation_alias(
 )
 def test_list_validation_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_body_model_name(openapi, path, content_type="multipart/form-data")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {
@@ -341,7 +341,7 @@ def read_list_uploadfile_alias_and_validation_alias(
 )
 def test_list_alias_and_validation_alias_schema(path: str):
     openapi = app.openapi()
-    body_model_name = get_body_model_name(openapi, path)
+    body_model_name = get_body_model_name(openapi, path, content_type="multipart/form-data")
 
     assert app.openapi()["components"]["schemas"][body_model_name] == {
         "properties": {

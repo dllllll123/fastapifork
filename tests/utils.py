@@ -1,5 +1,6 @@
 import importlib
 import sys
+from typing import Any
 
 import pytest
 
@@ -27,3 +28,23 @@ def skip_module_if_py_gte_314():
     """Skip entire module on Python 3.14+ at import time."""
     if sys.version_info >= (3, 14):
         pytest.skip("requires python3.13-", allow_module_level=True)
+
+
+def get_request_body_schema(
+    openapi: dict[str, Any],
+    path: str,
+    content_type: str = "application/json",
+    method: str = "post",
+) -> dict[str, Any]:
+    body = openapi["paths"][path][method]["requestBody"]
+    return body["content"][content_type]["schema"]
+
+
+def get_body_model_name(
+    openapi: dict[str, Any],
+    path: str,
+    content_type: str = "application/json",
+    method: str = "post",
+) -> str:
+    body_schema = get_request_body_schema(openapi, path, content_type, method)
+    return body_schema.get("$ref", "").split("/")[-1]
